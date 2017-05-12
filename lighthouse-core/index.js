@@ -38,9 +38,10 @@ const Config = require('./config/config');
  */
 
 module.exports = function(url, flags = {}, configJSON) {
-  return new Promise((resolve, reject) => {
+  const startTime = Date.now();
+  return Promise.resolve().then(_ => {
     if (!url) {
-      return reject(new Error('Lighthouse requires a URL'));
+      throw new Error('Lighthouse requires a URL');
     }
 
     // set logging preferences, assume quiet
@@ -53,7 +54,14 @@ module.exports = function(url, flags = {}, configJSON) {
     const connection = new ChromeProtocol(flags.port);
 
     // kick off a lighthouse run
-    resolve(Runner.run(connection, {url, flags, config}));
+    return Runner.run(connection, {url, flags, config})
+      .then(lighthouseResults => {
+        // Annotate with time to run lighthouse.
+        const endTime = Date.now();
+        lighthouseResults.calculationTime = endTime - startTime;
+
+        return lighthouseResults;
+      });
   });
 };
 
