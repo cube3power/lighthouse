@@ -58,7 +58,8 @@ module.exports = function(url, flags = {}, configJSON) {
       .then(lighthouseResults => {
         // Annotate with time to run lighthouse.
         const endTime = Date.now();
-        lighthouseResults.calculationTime = endTime - startTime;
+        lighthouseResults.timing = lighthouseResults.timing || {};
+        lighthouseResults.timing.total = endTime - startTime;
 
         return lighthouseResults;
       });
