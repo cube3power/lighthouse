@@ -120,7 +120,8 @@ describe('Module Tests', function() {
       assert.ok(Array.isArray(results.aggregations));
       assert.equal(results.aggregations.length, 0);
       assert.ok(results.audits.viewport);
-      assert.equal(typeof results.calculationTime, 'number');
+      assert.ok(results.timing);
+      assert.equal(typeof results.timing.total, 'number');
     });
   });
 
